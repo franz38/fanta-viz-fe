@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap');
+
+// https://coolors.co/f4f1de-e07a5f-3d405b-66779d-81b29a-f2cc8f
+
+$att-color: #E07A5F;
+$mid-color: #66779D;
+$def-color: #81B29A;
+$gk-color: #F2CC8F;
+
+body {
+    margin: 0;
+    font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #E5D4C3;
+    color: #5B5754;
+    background-color: #F5F5F5;
+    /* background-color: #00aed0;  */
+  }
+
+.mode-selector {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0px;
+}
+
+
+
+.playerStatsSection {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 1rem .5rem;
+
+    .player-stats-box{
+        position: relative;
+        max-width: 1000px;
+        width: 100%;
+
+        .player-name {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+        }
+
+        g.chart rect {
+            cursor: pointer;
+        }
+    }
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    padding: 4px;
+    margin-left: 15px;
+    transform: translateY(-50%);
+    width: max-content;
+    max-width: 10rem;
+    padding: 4px 6px;
+    opacity: 0;
+    top: 0px;
+    left: 0px;
+
+    
+    &.visible {
+        opacity: .9;
+    }
+
+      span {
+        display: block;
+        word-break: keep-all;
+      }
+
+      .item {
+        display: flex;
+        align-items: center;
+      }
+
+      .tooltip-sq {
+        width: 10px;
+        height: 10px;
+        margin-right: 6px;
+      }
+
+      .tooltip-crcl {
+        width: 6px;
+        height: 6px;
+        margin: 2px;
+        /* border-radius: 50%; */
+        margin-right: 6px;
+      }
+  }
+
+.header {
+    position: relative;
+    height: 8rem;
+
+    .header-box{
+        position: absolute;
+        width: 100%;
+        padding: .5rem 0px;
+
+        .header-content {
+            width: 30rem;
+            max-width: 100%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .addPlayerSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    
+        .box {
+            position: relative;
+            width: 20rem;
+            max-width: 100%;
+        }
+    
+        .searchbox {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: #fff;
+    
+            .icon {
+                width: 1rem;
+                height: 1rem;
+                padding: .5rem;
+              }
+    
+              input {
+                border: 0px;
+                outline: 0px;
+                padding: 1rem 0px;
+                font-size: 14px;
+                width: 100%;
+                font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                  sans-serif;
+              }
+          }
+          
+          .results {
+            position: absolute;
+            top: 100%;
+            width: 100%;
+          }
+    }
+}
+
+.players-list {
+
+    position: relative;
+    left: 0px;
+    width: 100%;
+    z-index: 1;
+    background-color: rgba(#fff, .8);
+
+    .result {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        background-color: #fff;
+        padding: 1.25rem .5rem;
+        margin: .5rem 0px;
+
+        &:last-child{
+            margin-bottom: 0px;
+        }
+
+        p {
+            padding: 0rem 5px;
+            margin: 0px;
+            }
+
+        
+        }
+
+    .role-icon{
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        margin: 0px 5px;
+        background-color: gray;
+        color: rgba(#fff, 0.8);
+        &.role-A {
+            background-color: $att-color;
+        }
+        &.role-M {
+            background-color: $mid-color;
+        }
+        &.role-D {
+            background-color: $def-color;
+        }
+        &.role-P {
+            background-color: $gk-color;
+        }
+    }
+}
+
+.selected-panel {
+    width: 16rem;
+    padding: 1rem;
+
+    span.panel-header {
+        padding: 1rem 0px;
+        display: block;
+    }
+}
