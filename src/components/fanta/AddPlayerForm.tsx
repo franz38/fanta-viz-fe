@@ -2,12 +2,12 @@ import React, { useState } from "react";
 // import { ArrowRight, Camera } from '@mui/icons-material'
 import { GrAdd } from 'react-icons/gr';
 import {AiOutlineSearch} from 'react-icons/ai'
-import { Player } from "./wrapper";
+import { Player } from "../../types/Player";
 import { PlayerList } from "./PlayerList";
 
 interface AddPlayerFormProps {
     players: Player[]; 
-    onSelect: (playerName: string) => void;
+    onSelect: (playerName: Player) => void;
 }
 export const AddPlayerForm = (props: AddPlayerFormProps) => {
 
@@ -24,8 +24,8 @@ export const AddPlayerForm = (props: AddPlayerFormProps) => {
             setsuggested([])
     }
 
-    const onSelect = (v: string) => {
-        props.onSelect(v)
+    const onSelect = (player: Player) => {
+        props.onSelect(player)
         setsuggested([])
         setQuery("")
     }
@@ -47,7 +47,7 @@ export const AddPlayerForm = (props: AddPlayerFormProps) => {
                 </div>
 
                 <div className="results">
-                    <PlayerList players={suggested} onClick={(pl) => onSelect(pl.name)} />
+                    <PlayerList players={suggested} onClick={(pl) => onSelect(pl)} />
                 </div>
 
             </div>

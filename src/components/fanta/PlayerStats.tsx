@@ -1,34 +1,14 @@
+import { CircularProgress } from "@mui/material";
 import * as d3 from "d3";
 import React, { useEffect, useRef, useState } from "react";
 import { IoMdOptions } from 'react-icons/io';
-
-export interface Stat {
-    id: number;
-    role: string;
-    voto: number;
-    gf: number;
-    gs: number;
-    rp: number;
-    rs: number;
-    rf: number;
-    au: number;
-    amm: number;
-    esp: number;
-    ass: number;
-    day: number;
-    nome?: string;
-}
-
-
-
-export enum VisualizationMode {
-    FV = "FV",
-    PARZIALI = "PARZIALI",
-    BONUS = "BONUS"
-}
+import { getPlayerData } from "../../services";
+import { Player } from "../../types/Player";
+import { Stat } from "../../types/Stat";
+import { VisualizationMode } from "../../types/VisualizationMode";
 
 interface PlayerStatsProps {
-    data: Stat[];
+    data: Player;
     mode: VisualizationMode
 }
 
@@ -41,7 +21,8 @@ export const PlayerStats = (props: PlayerStatsProps) => {
     const chartRef = useRef<HTMLInputElement>(null);
     const tooltipRef = useRef<HTMLInputElement>(null);
     const [statHovered, setStatHovers] = useState<Stat>();
-    const [playerName, setPlayerName] = useState<string>("");
+    const [playerData, setPlayerData] = useState<Player>();
+    const [loading, setLoading] = useState<boolean>(true);
 
     // const W = 1000
     const HTOT = 300
@@ -58,14 +39,14 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         return 3*stat.gf + 1*stat.ass + 3*stat.rp - 1*stat.gs - 0.5*stat.amm - 1*stat.esp
     }
 
-    const getMaxValue = (): number => {
-        if (props.mode == VisualizationMode.FV)
-            return d3.max(props.data.map(d => getFv(d))) ?? 0
-        else if (props.mode == VisualizationMode.PARZIALI){
-            return d3.max(props.data.map(d => getFv(d))) ?? 0
-        }
-        return 0
-    }
+    // const getMaxValue = (): number => {
+    //     if (props.mode == VisualizationMode.FV)
+    //         return d3.max(data?.stats?.map(d => getFv(d))) ?? 0
+    //     else if (props.mode == VisualizationMode.PARZIALI){
+    //         return d3.max(data.map(d => getFv(d))) ?? 0
+    //     }
+    //     return 0
+    // }
 
     const getYScale = () => {
         if (props.mode == VisualizationMode.FV || props.mode == VisualizationMode.PARZIALI)
@@ -85,12 +66,23 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
     const mouseLeave = (mouseEvent: any, data: Stat) => {
         setStatHovers(undefined)
-        d3.select(tooltipRef.current)
-            .style("left", 0 + "px")
-            .style("top", 0 + "px")
+        // d3.select(tooltipRef.current)
+        //     .style("left", 0 + "px")
+        //     .style("top", 0 + "px")
     }
 
-    const initChart = () => {
+    const initChart = async (): Promise<Player> => {
+
+        // load data
+        let chartData = props.data
+        console.log(chartData)
+        if (! (chartData?.stats?.length && chartData?.stats?.length > 0)){
+            chartData = await getPlayerData(chartData.name)
+        }
+        setPlayerData(chartData)
+        
+
+        // init svg
         const svg = d3.select(chartRef.current)
             .append("svg")
             // .attr("width", W)
@@ -102,9 +94,10 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         svg.append("g").attr("class", "yAxisBox")
         svg.append("g").attr("class", "xAxisBox")
 
+        return chartData;
     }
 
-    const drawChart = () => {
+    const drawChart = (data: Player) => {
 
         const svg = d3.select(chartRef.current).select("svg").select("g.box");
         
@@ -116,7 +109,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
         // scales init
         const xScale = d3.scaleBand()
-            .domain(props.data.map(d => d.day.toString()))
+            .domain(data?.stats?.map(d => d.day.toString()) ?? [])
             .range([Pl, W])
             .padding(0.2)
         
@@ -165,7 +158,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
         // data
         const dayBox = svg.select("g.chart").selectAll("rect")
-            .data(props.data)
+            .data(data?.stats ?? [])
             .enter()
             .append("g")
                 .attr("transform", d => "translate(" + xScale(d.day.toString()) + " 0)")
@@ -205,22 +198,29 @@ export const PlayerStats = (props: PlayerStatsProps) => {
                 .on("mousemove", (a,b) => mouseMove(a,b))
                 .on("mouseleave", (a,b) => mouseLeave(a,b))
         }
+        setLoading(false)
     }
 
     useEffect(() => {
-        initChart()
-        drawChart()
+        initChart().then((data) => {
+            console.log("draw")
+            drawChart(data)
+        })
     }, [])
 
-    useEffect(() => {
-        drawChart()
-        setPlayerName(props.data.find(d => d.nome)?.nome ?? "")
-    }, [props])
+
     
     return <>
+        
         <div className="playerStatsSection">
-            <div ref={chartRef} className={"player-stats-box"} >
-                <p className="player-name">{playerName}</p>
+            <p className="player-name">{props.data?.name ?? ""}</p>
+            
+            {loading && <div className="spinnerBox">
+                <CircularProgress style={{padding: "3rem 0px", position: "absolute"}}/>
+            </div>
+            }
+            
+            <div ref={chartRef} className={"player-stats-box " + (loading ? "hidden" : "")} >
                 <div ref={tooltipRef} className={(statHovered != null) ? "tooltip visible" : "tooltip"}>
                     
                     {statHovered && <>
