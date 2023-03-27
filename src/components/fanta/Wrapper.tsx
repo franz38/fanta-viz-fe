@@ -36,10 +36,10 @@ export const Wrapper = () => {
         addPlayer(plList[0])
     }
 
-    useEffect(() => {
-        loadPlayersList()
+    // useEffect(() => {
+    //     loadPlayersList()
         
-    }, [])
+    // }, [])
 
     return <div className="wrapper" key="wrapper">
 
