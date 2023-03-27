@@ -97,12 +97,12 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         return chartData;
     }
 
-    const drawChart = (data: Player) => {
-
+    const drawChart = (data: Player) => {        
+        setLoading(true)
         const svg = d3.select(chartRef.current).select("svg").select("g.box");
         
         const boxWidth = parseInt(d3.select(chartRef.current).style('width'), 10);
-        console.log(boxWidth)
+        // console.log(boxWidth)
         const W = boxWidth
 
         d3.select(chartRef.current).select("svg").attr("width", W)
@@ -161,6 +161,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
             .data(data?.stats ?? [])
             .enter()
             .append("g")
+                // .attr("key", d => props.data.name + d.day)
                 .attr("transform", d => "translate(" + xScale(d.day.toString()) + " 0)")
         
         if (props.mode == VisualizationMode.FV){
@@ -203,10 +204,15 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
     useEffect(() => {
         initChart().then((data) => {
-            console.log("draw")
             drawChart(data)
+            setPlayerData(data)
         })
     }, [])
+
+    useEffect(() => {
+        if (playerData)
+            drawChart(playerData)
+    }, [props])
 
 
     
@@ -221,9 +227,9 @@ export const PlayerStats = (props: PlayerStatsProps) => {
             }
             
             <div ref={chartRef} className={"player-stats-box " + (loading ? "hidden" : "")} >
-                <div ref={tooltipRef} className={(statHovered != null) ? "tooltip visible" : "tooltip"}>
+                {statHovered && <div ref={tooltipRef} className={(statHovered != null) ? "tooltip visible" : "tooltip"}>
                     
-                    {statHovered && <>
+                    {true && <>
                         <div className="item">
                             <div className="tooltip-sq" style={{background: "#fff"}}></div>
                             <span>Fanta voto: {statHovered.voto + getBonus(statHovered)}</span>
@@ -275,7 +281,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
                         </div>}
                     </>}
                     
-                </div>
+                </div>}
             </div>
         </div>
     </>
