@@ -2,9 +2,10 @@ import { CircularProgress } from "@mui/material";
 import * as d3 from "d3";
 import React, { useEffect, useRef, useState } from "react";
 import { IoMdOptions } from 'react-icons/io';
-import { getPlayerData } from "../../services";
+// import { getPlayerData } from "../../services";
+import { ClientFactory } from "../../services/ClientFactory";
 import { Player } from "../../types/Player";
-import { Stat } from "../../types/Stat";
+import { PlayerData } from "../../types/PlayerData";
 import { VisualizationMode } from "../../types/VisualizationMode";
 
 interface PlayerStatsProps {
@@ -20,8 +21,8 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
     const chartRef = useRef<HTMLInputElement>(null);
     const tooltipRef = useRef<HTMLInputElement>(null);
-    const [statHovered, setStatHovers] = useState<Stat>();
-    const [playerData, setPlayerData] = useState<Player>();
+    const [statHovered, setStatHovers] = useState<PlayerData>();
+    const [playerData, setPlayerData] = useState<PlayerData[]>();
     const [loading, setLoading] = useState<boolean>(true);
 
     // const W = 1000
@@ -31,22 +32,14 @@ export const PlayerStats = (props: PlayerStatsProps) => {
     const Pl = 20
     const H = HTOT - Pt - Pb
 
-    const getFv = (stat: Stat) => {
+    const getFv = (stat: PlayerData) => {
         return stat.voto + getBonus(stat)
     }
 
-    const getBonus = (stat: Stat) => {
-        return 3*stat.gf + 1*stat.ass + 3*stat.rp - 1*stat.gs - 0.5*stat.amm - 1*stat.esp
+    const getBonus = (stat: PlayerData) => {
+        return 3*stat.gf + 1*stat.ass + 3*stat.rp - 1*stat.gs - 0.5*stat.amm - 1*stat.esp + 2*stat.rf - 3*stat.rs
     }
 
-    // const getMaxValue = (): number => {
-    //     if (props.mode == VisualizationMode.FV)
-    //         return d3.max(data?.stats?.map(d => getFv(d))) ?? 0
-    //     else if (props.mode == VisualizationMode.PARZIALI){
-    //         return d3.max(data.map(d => getFv(d))) ?? 0
-    //     }
-    //     return 0
-    // }
 
     const getYScale = () => {
         if (props.mode == VisualizationMode.FV || props.mode == VisualizationMode.PARZIALI)
@@ -54,32 +47,34 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         return [-6, 12]
     }
 
-    const mouseHover = (mouseEvent: any, stat: Stat) => {
+    const mouseHover = (mouseEvent: any, stat: PlayerData) => {
+        d3.select(tooltipRef.current)
+            .style("left", mouseEvent.layerX + "px")
+            .style("top", mouseEvent.layerY + "px")
+            .style("opacity", "0.9")
         setStatHovers(stat)
     }
 
-    const mouseMove = (mouseEvent: any, data: Stat) => {
+    const mouseMove = (mouseEvent: any, data: PlayerData) => {
         d3.select(tooltipRef.current)
             .style("left", mouseEvent.layerX + "px")
             .style("top", mouseEvent.layerY + "px")
     }
 
-    const mouseLeave = (mouseEvent: any, data: Stat) => {
+    const mouseLeave = (mouseEvent: any, data: PlayerData) => {
         setStatHovers(undefined)
-        // d3.select(tooltipRef.current)
-        //     .style("left", 0 + "px")
-        //     .style("top", 0 + "px")
+        d3.select(tooltipRef.current)
+            .style("left", 0 + "px")
+            .style("top", 0 + "px")
+            .style("opacity", "0")
     }
 
-    const initChart = async (): Promise<Player> => {
+    const initChart = async (): Promise<PlayerData[]> => {
 
         // load data
-        let chartData = props.data
-        console.log(chartData)
-        if (! (chartData?.stats?.length && chartData?.stats?.length > 0)){
-            chartData = await getPlayerData(chartData.name)
-        }
-        setPlayerData(chartData)
+        const service = ClientFactory.getService();
+        const playerData = await service.getPlayerData(props.data.fantaCode)
+        setPlayerData(playerData)
         
 
         // init svg
@@ -94,10 +89,11 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         svg.append("g").attr("class", "yAxisBox")
         svg.append("g").attr("class", "xAxisBox")
 
-        return chartData;
+        return playerData;
     }
 
-    const drawChart = (data: Player) => {        
+    const drawChart = (data: PlayerData[]) => {        
+        
         setLoading(true)
         const svg = d3.select(chartRef.current).select("svg").select("g.box");
         
@@ -109,7 +105,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
         // scales init
         const xScale = d3.scaleBand()
-            .domain(data?.stats?.map(d => d.day.toString()) ?? [])
+            .domain(Array(38).fill(1).map((x,i) => (i+1).toString()) ?? [])
             .range([Pl, W])
             .padding(0.2)
         
@@ -158,7 +154,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
         // data
         const dayBox = svg.select("g.chart").selectAll("rect")
-            .data(data?.stats ?? [])
+            .data(data ?? [])
             .enter()
             .append("g")
                 // .attr("key", d => props.data.name + d.day)
@@ -227,9 +223,9 @@ export const PlayerStats = (props: PlayerStatsProps) => {
             }
             
             <div ref={chartRef} className={"player-stats-box " + (loading ? "hidden" : "")} >
-                {statHovered && <div ref={tooltipRef} className={(statHovered != null) ? "tooltip visible" : "tooltip"}>
+                {<div ref={tooltipRef} className={(statHovered != null) ? "tooltip" : "tooltip"}>
                     
-                    {true && <>
+                    {statHovered && <>
                         <div className="item">
                             <div className="tooltip-sq" style={{background: "#fff"}}></div>
                             <span>Fanta voto: {statHovered.voto + getBonus(statHovered)}</span>
@@ -247,38 +243,44 @@ export const PlayerStats = (props: PlayerStatsProps) => {
 
                         {statHovered.gf > 0 && <div className="item">
                             <div className="tooltip-crcl" style={{background: blue}}></div>
-                            <span>- {statHovered.gf} goal</span>
+                            <span>+ {statHovered.gf} goal</span>
                         </div>}
 
                         {statHovered.ass > 0 && <div className="item">
                             <div className="tooltip-crcl" style={{background: blue}}></div>
-                            <span>- {statHovered.ass} assist</span>
+                            <span>+ {statHovered.ass} assist</span>
                         </div>}
 
-                        {statHovered.rs > 0 && <div className="item">
+                        {statHovered.rf > 0 && <div className="item">
                             <div className="tooltip-crcl" style={{background: blue}}></div>
-                            <span>- {statHovered.rs} rigori segnati</span>
+                            <span>+ {statHovered.rf} rigori segnati</span>
                         </div>}
 
                         {statHovered.rp > 0 && <div className="item">
                             <div className="tooltip-crcl" style={{background: blue}}></div>
-                            <span>- {statHovered.rp} rigori parati</span>
+                            <span>+ {statHovered.rp} rigori parati</span>
                         </div>}
 
                         {statHovered.gs > 0 && <div className="item">
                             <div className="tooltip-crcl" style={{background: red}}></div>
                             <span>- {statHovered.gs} goal subiti</span>
                         </div>}
-
-                        {statHovered.amm > 0 && <div className="item">
+                        
+                        {statHovered.rs > 0 && <div className="item">
                             <div className="tooltip-crcl" style={{background: red}}></div>
-                            <span>- ammonizione</span>
+                            <span>- {statHovered.rs} rigori sbagliati</span>
                         </div>}
 
                         {statHovered.esp > 0 && <div className="item">
                             <div className="tooltip-crcl" style={{background: red}}></div>
                             <span>- espulsione</span>
                         </div>}
+
+                        {statHovered.amm > 0 && <div className="item">
+                            <div className="tooltip-crcl" style={{background: red}}></div>
+                            <span>- ammonizione</span>
+                        </div>}
+                        
                     </>}
                     
                 </div>}

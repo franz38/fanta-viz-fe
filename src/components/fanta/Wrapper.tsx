@@ -7,7 +7,7 @@ import "../../style/style.scss";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup } from "@mui/material";
 import { CollectionsBookmark, KeyboardArrowDown } from "@mui/icons-material";
 import { PlayerList } from "./PlayerList";
-import { getPlayerData, getPlayers } from "../../services";
+import { ClientFactory } from "../../services/ClientFactory";
 import { Player } from "../../types/Player";
 
 export const Wrapper = () => {
@@ -31,15 +31,16 @@ export const Wrapper = () => {
     }
 
     const loadPlayersList = async () => {
-        const plList = await getPlayers()
+        const service = ClientFactory.getService();
+        const plList = await service.getPlayers()
         setPlayers(plList)
         addPlayer(plList[0])
     }
 
-    // useEffect(() => {
-    //     loadPlayersList()
+    useEffect(() => {
+        loadPlayersList()
         
-    // }, [])
+    }, [])
 
     return <div className="wrapper" key="wrapper">
 

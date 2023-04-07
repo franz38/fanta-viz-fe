@@ -1,8 +1,6 @@
-import { Stat } from "./Stat";
-
 
 export interface Player {
+    fantaCode: number;
     name: string;
     role: string;
-    stats?: Stat[];
 }

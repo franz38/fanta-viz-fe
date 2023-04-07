@@ -1,7 +1,8 @@
-
-export interface Stat {
+export interface PlayerData {
     id: number;
+    fantaCode: number;
     role: string;
+    name: string;
     voto: number;
     gf: number;
     gs: number;
@@ -12,6 +13,7 @@ export interface Stat {
     amm: number;
     esp: number;
     ass: number;
+    gdv: number;
+    gdp: number;
     day: number;
-    nome?: string;
 }
