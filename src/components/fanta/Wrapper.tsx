@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { PlayerStats } from "./PlayerStats";
 import { VisualizationMode } from "../../types/VisualizationMode";
 import { AddPlayerForm } from "./AddPlayerForm";
-import { IoMdOptions } from 'react-icons/io';
 import "../../style/style.scss";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup } from "@mui/material";
-import { CollectionsBookmark, KeyboardArrowDown } from "@mui/icons-material";
-import { PlayerList } from "./PlayerList";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup,  } from "@mui/material";
 import { ClientFactory } from "../../services/ClientFactory";
 import { Player } from "../../types/Player";
+
+export interface Player4List extends Player {
+    selected?: boolean;
+}
 
 export const Wrapper = () => {
 
@@ -44,7 +45,7 @@ export const Wrapper = () => {
 
     return <div className="wrapper" key="wrapper">
 
-        <div className="header">
+        {/* <div className="header">
             <div className="header-box">
                 <div className="header-content">
                     <AddPlayerForm players={players} onSelect={addPlayer}/>
@@ -56,11 +57,23 @@ export const Wrapper = () => {
                     </IconButton>
                 </div>
             </div>
-        </div>
+        </div> */}
 
+        <div className="main">
 
-        <div className="playersList">
-            {selectedPlayers.map((pd, id) => <PlayerStats data={pd} mode={visualMode} key={"pd-" + id.toString()} />)}
+            <div className="leftBar">
+                <div className="playersList">
+                    <AddPlayerForm players={players} selectedPlayers={selectedPlayers} onSelect={addPlayer}/>
+                    {/* <PlayerList players={players} onClick={player => addPlayer(player)} /> */}
+                </div>
+            </div>
+
+            <div className="content">
+                <div className="playerDataList">
+                    {selectedPlayers.map((pd, id) => <PlayerStats data={pd} mode={visualMode} key={"pd-" + id.toString()} />)}
+                </div>
+            </div>
+
         </div>
         
         {/* display settings */}
@@ -94,7 +107,7 @@ export const Wrapper = () => {
             </DialogActions>
         </Dialog>
 
-        <Drawer
+        {/* <Drawer
             anchor={"right"}
             open={showSelectionPanel}
             onClose={() => setShowSelectionPanel(false)}
@@ -103,7 +116,7 @@ export const Wrapper = () => {
                     <span className="panel-header">Selected players</span>
                     <PlayerList players={selectedPlayers} onClick={player => removePlayer(player)} />
                 </div>
-        </Drawer>
+        </Drawer> */}
        
     </div>
 }

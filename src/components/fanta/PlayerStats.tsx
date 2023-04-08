@@ -17,6 +17,41 @@ const blue = "#66779D";
 const red = "#E07A5F";
 const green = "#81B29A";
 
+const desktopConfig = {
+
+}
+
+class StyleManager{
+
+    private static threshold = 800;
+
+    private static mobileConfig = {
+        HTOT: 200,
+        Pt: 20,
+        Pb: 20,
+        Pl: 20,
+        H: 200 - 20 - 20
+    }
+
+    private static desktopConfig = {
+        HTOT: 300,
+        Pt: 20,
+        Pb: 20,
+        Pl: 20,
+        H: 300 - 20 - 20
+    }
+
+    public static H(width: number){
+        return width > this.threshold ? StyleManager.desktopConfig.H : StyleManager.mobileConfig.H;
+    }
+
+    public static HTOT(width: number){
+        return width > this.threshold ? StyleManager.desktopConfig.HTOT : StyleManager.mobileConfig.HTOT;
+    }
+    
+}
+
+
 export const PlayerStats = (props: PlayerStatsProps) => {
 
     const chartRef = useRef<HTMLInputElement>(null);
@@ -81,7 +116,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         const svg = d3.select(chartRef.current)
             .append("svg")
             // .attr("width", W)
-            .attr("height", HTOT)
+            // .attr("height", StyleManager.HTOT())
                 .append("g")
                 .attr("class", "box")
         
@@ -98,10 +133,12 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         const svg = d3.select(chartRef.current).select("svg").select("g.box");
         
         const boxWidth = parseInt(d3.select(chartRef.current).style('width'), 10);
-        // console.log(boxWidth)
+
         const W = boxWidth
+        const chartH = StyleManager.H(boxWidth)
 
         d3.select(chartRef.current).select("svg").attr("width", W)
+        d3.select(chartRef.current).select("svg").attr("height", StyleManager.HTOT(boxWidth))
 
         // scales init
         const xScale = d3.scaleBand()
@@ -111,10 +148,15 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         
         const yScale = d3.scaleLinear()
             .domain(getYScale())
-            .range([H, 0])
+            .range([chartH, 0])
 
         const yAxis = d3.axisLeft(yScale)
+
+        let tickAmountRatio = 1;
+        if (W < 800)
+            tickAmountRatio = 5
         const xAxis = d3.axisBottom(xScale)
+            .tickValues(Array(38).fill(1).map((x,i) => i).filter(i => i%tickAmountRatio == 0).map(i => (i+1).toString()))
 
         // draw axis
         svg.select("g.yAxisBox")
@@ -130,7 +172,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
             .call(yAxis)
         svg.select("g.xAxisBox")
             .append("g")
-            .style("transform", `translate(${0}px,${H + Pt}px)`)
+            .style("transform", `translate(${0}px,${chartH + Pt}px)`)
             .call(xAxis)
 
         svg.select("g.chart").selectAll("rect").remove()
@@ -163,14 +205,14 @@ export const PlayerStats = (props: PlayerStatsProps) => {
         if (props.mode == VisualizationMode.FV){
             dayBox.append("rect")
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => H - yScale(getFv(d)))
+                .attr("height", d => chartH - yScale(getFv(d)))
                 .attr("y", d => yScale(getFv(d)))
                 .attr("fill", green)
         }
         else if (props.mode == VisualizationMode.PARZIALI){
             dayBox.append("rect")
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => H - yScale(d.voto))
+                .attr("height", d => chartH - yScale(d.voto))
                 .attr("y", d => yScale(d.voto))
                 .attr("fill", green)
                 .on("mouseover", (a,b) => mouseHover(a,b))
@@ -178,8 +220,8 @@ export const PlayerStats = (props: PlayerStatsProps) => {
                 .on("mouseleave", (a,b) => mouseLeave(a,b))
             dayBox.append("rect")
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => getBonus(d) >= 0 ? H - yScale(getBonus(d)) -2.5  : H - yScale(-getBonus(d)))
-                .attr("y", d => getBonus(d) >= 0 ? (yScale(d.voto) - H + yScale(getBonus(d)) ) : yScale(d.voto) )
+                .attr("height", d => getBonus(d) >= 0 ? chartH - yScale(getBonus(d)) -2.5  : chartH - yScale(-getBonus(d)))
+                .attr("y", d => getBonus(d) >= 0 ? (yScale(d.voto) - chartH + yScale(getBonus(d)) ) : yScale(d.voto) )
                 .attr("fill", d => getBonus(d) >= 0 ? blue : red)
                 .on("mouseover", (a,b) => mouseHover(a,b))
                 .on("mousemove", (a,b) => mouseMove(a,b))
@@ -214,7 +256,7 @@ export const PlayerStats = (props: PlayerStatsProps) => {
     
     return <>
         
-        <div className="playerStatsSection">
+        <div className="playerStatsSection tab">
             <p className="player-name">{props.data?.name ?? ""}</p>
             
             {loading && <div className="spinnerBox">
