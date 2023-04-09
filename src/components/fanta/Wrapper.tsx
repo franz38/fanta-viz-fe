@@ -35,37 +35,23 @@ export const Wrapper = () => {
         const service = ClientFactory.getService();
         const plList = await service.getPlayers()
         setPlayers(plList)
-        addPlayer(plList[0])
     }
 
     useEffect(() => {
         loadPlayersList()
-        
     }, [])
 
     return <div className="wrapper" key="wrapper">
 
-        {/* <div className="header">
-            <div className="header-box">
-                <div className="header-content">
-                    <AddPlayerForm players={players} onSelect={addPlayer}/>
-                    <div onClick={() => setShowVizPanel(true)}>
-                        <IoMdOptions />
-                    </div>
-                    <IconButton aria-label="delete" onClick={() => setShowSelectionPanel(true)}>
-                        <CollectionsBookmark />
-                    </IconButton>
-                </div>
-            </div>
-        </div> */}
-
         <div className="main">
 
             <div className="leftBar">
-                <div className="playersList">
-                    <AddPlayerForm players={players} selectedPlayers={selectedPlayers} onSelect={addPlayer}/>
-                    {/* <PlayerList players={players} onClick={player => addPlayer(player)} /> */}
-                </div>
+                <AddPlayerForm 
+                    players={players} 
+                    selectedPlayers={selectedPlayers} 
+                    onSelect={addPlayer}
+                    onRemove={removePlayer}
+                />
             </div>
 
             <div className="content">

@@ -28,22 +28,78 @@ body {
 
 .main {
     display: flex;
+    flex-direction: column;
     max-width: 1200px;
     margin: auto;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    
+    
+    @media (min-width: 900px){
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        flex-direction: row;
+    }
 
     .playersList {
 
     }
 
     .leftBar{
-        width: 14rem;
-        margin-right: 2rem;
+        width: 100%;
+        z-index: 1;
+        
+        @media (min-width: 900px){
+            margin-right: 2rem;
+            width: 14rem;
+        }
+
+        .playersList{
+            position: fixed;
+            width: 100%;
+            background-color: #fff;
+            
+            &.focused{
+                height: 100vh;
+            }
+
+            @media (min-width: 900px){
+                height: calc(100vh - 4rem);
+                width: 14rem;
+                background-color: transparent;
+            }
+        
+            .addPlayerSection{
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+        
+            .results{
+                overflow: scroll;
+                
+                @media (min-width: 900px){
+                    width: 14rem;
+                }
+
+                &.hidden{
+                    display: none;
+        
+                    @media(min-width: 900px){
+                        display: block;
+                    }
+                }
+            }
+        
+        }
+        
     }
 
     .content {
         flex-grow: 1;
+        margin-top: 9rem;
+
+        @media(min-width: 900px){
+            margin-top: 0px;
+        }
     }
 }
 
@@ -52,25 +108,6 @@ body {
     border-radius: 2px;
 }
 
-.playersList{
-
-    width: 14rem;
-    position: fixed;
-    height: calc(100vh - 4rem);
-
-    .addPlayerSection{
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-    .results{
-        overflow: scroll;
-
-        width: 14rem;
-    }
-
-}
 
 .playersDataList {
     padding: 0px 0px 4rem 0px;
@@ -170,12 +207,25 @@ body {
     background: #fff;
     padding: 1.25rem 0.5rem;
 
+    @media (min-width: 900px){
+        width: auto;
+        input{
+            font-size: 16px;
+        }
+    }
+
+
     .queryBox{   
         display: flex;
         align-items: center;
         border: 1px solid #ccc;
         border-radius: 2px;
         background: #cccccc1f;
+        width: 100%;
+
+        @media (min-width: 900px){
+
+        }
         .icon {
             width: 1rem;
             height: 1rem;
@@ -195,6 +245,22 @@ body {
         }
     }
 
+    .searchBox-2section{
+        display: flex;
+        align-content: space-between;
+        width: 100%;
+
+        &.hidden{
+            display: none;
+
+            @media(min-width: 900px){
+                display: block;
+            }
+        }
+
+        
+    }
+
     .rolesBox {
         padding: 1.5rem 0px .5rem 0px;
         width: 100%;
@@ -202,51 +268,17 @@ body {
             cursor: pointer;
         }
     }
+
+    button{
+        height: 30px;
+        margin: 1.5rem 0px 0.5rem 0px;
+        width: 8rem;
+
+        @media (min-width: 900px){
+            display: none;
+        }
+    }
 }
-
-.searchbox {
-    
-  }
-  
-
-// .header {
-//     position: relative;
-//     height: 8rem;
-
-//     .header-box{
-//         position: absolute;
-//         width: 100%;
-//         padding: .5rem 0px;
-
-//         .header-content {
-//             width: 30rem;
-//             max-width: 100%;
-//             margin: auto;
-//             display: flex;
-//             align-items: center;
-//             justify-content: center;
-//         }
-//     }
-
-//     .addPlayerSection{
-//         display: flex;
-//         flex-direction: column;
-//         align-items: center;
-    
-//         .box {
-//             position: relative;
-//             width: 20rem;
-//             max-width: 100%;
-//         }
-    
-        
-//           .results {
-//             position: absolute;
-//             top: 100%;
-//             width: 100%;
-//           }
-//     }
-// }
 
 .players-list {
 
@@ -262,6 +294,14 @@ body {
         cursor: pointer;
         padding: 1.25rem .5rem;
         margin: 2px 0px;
+        border-bottom: 1px solid #eee;
+
+        @media (min-width: 900px){
+            border-bottom: none;
+            .addIcon{
+                opacity: 0;
+            }
+        }
 
         &:hover {
             background-color: rgba(gray, .01);
@@ -285,16 +325,17 @@ body {
 
         .addIcon {
             padding-right: 1rem;
-            opacity: 0;
         }
         
     }
 }
 
 .role-icon{
+    $icon-size: 20px;
+
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: $icon-size;
+    height: $icon-size;
     text-align: center;
     margin: 0px 5px;
     background-color: gray;
@@ -314,6 +355,18 @@ body {
     &.inactive{
         background-color: transparent;
         color: gray;
+    }
+    &.button{
+        $mobile-size: $icon-size* 1.5;
+        width: $mobile-size;
+        height: $mobile-size;
+        line-height: $mobile-size;
+
+        @media(min-width: 900px){
+            width: $icon-size;
+            height: $icon-size;
+            line-height: $icon-size;
+        }
     }
 }
 

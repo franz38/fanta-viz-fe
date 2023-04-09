@@ -10,6 +10,7 @@ interface AddPlayerFormProps {
     players: Player[];
     selectedPlayers: Player4List[];
     onSelect: (playerName: Player) => void;
+    onRemove: (player: Player) => void;
 }
 export const AddPlayerForm = (props: AddPlayerFormProps) => {
 
@@ -17,15 +18,6 @@ export const AddPlayerForm = (props: AddPlayerFormProps) => {
     const [query, setQuery] = useState<string>("");
     const [roles, setRoles] = useState<string[]>([]);
     const [focus, setFocus] = useState<boolean>();
-
-    // const onSearch = (query_: string) => {
-    //     setQuery(query_)
-    //     if (query_.length > 2){
-    //         setsuggested(props.players.filter(v => v.name.toLowerCase().includes(query_.toLowerCase())))
-    //     }
-    //     else if (query_.length == 0)
-    //         setsuggested([])
-    // }
 
     const onQueryChange = (query_: string) => {
         setQuery(query_)
@@ -78,44 +70,50 @@ export const AddPlayerForm = (props: AddPlayerFormProps) => {
 
     return <>
         {/* <AddCircle /> */}
-        <div className="addPlayerSection">
+        <div className={"playersList " + (focus ? "focused" : "")}>
+            <div className="addPlayerSection">
 
-            <div className="searchbox tab">
+                <div className="searchbox tab">
 
-                <div className="queryBox">
-                    <AiOutlineSearch className="icon" style={{width:"1rem", height: "1rem"}} onClick={() => setFocus(true)}/>
-                    <input 
-                        type="text" 
-                        value={query} 
-                        onChange={(e) => onQueryChange(e.target.value)}
-                        onBlur={() => setFocus(false)}
-                    ></input>
+                    <div className="queryBox">
+                        <AiOutlineSearch className="icon" style={{width:"1rem", height: "1rem"}} onClick={() => setFocus(true)}/>
+                        <input 
+                            type="text" 
+                            value={query} 
+                            onChange={(e) => onQueryChange(e.target.value)}
+                            onFocus={() => setFocus(true)}
+                        ></input>
+                    </div>
+
+                    <div className={"searchBox-2section " + (focus ? "" : "hidden")}>
+                        <div className="rolesBox">
+                            <span 
+                                className={"role-icon button role-P " + (roles.some(r => r == "P") ? "" : "inactive")} 
+                                onClick={() => onRoleChange('P')}>P</span>
+                            <span 
+                                className={"role-icon button role-D " + (roles.some(r => r == "D") ? "" : "inactive")} 
+                                onClick={() => onRoleChange('D')}>D</span>
+                            <span 
+                                className={"role-icon button role-C " + (roles.some(r => r == "C") ? "" : "inactive")} 
+                                onClick={() => onRoleChange('C')}>C</span>
+                            <span 
+                                className={"role-icon button role-A " + (roles.some(r => r == "A") ? "" : "inactive")} 
+                                onClick={() => onRoleChange('A')}>A</span>
+                        </div>
+                        <button onClick={() => setFocus(false)}>close filters</button>
+                    </div>
                 </div>
 
-                <div className="rolesBox">
-                    <span 
-                        className={"role-icon role-P " + (roles.some(r => r == "P") ? "" : "inactive")} 
-                        onClick={() => onRoleChange('P')}>P</span>
-                    <span 
-                        className={"role-icon role-D " + (roles.some(r => r == "D") ? "" : "inactive")} 
-                        onClick={() => onRoleChange('D')}>D</span>
-                    <span 
-                        className={"role-icon role-C " + (roles.some(r => r == "C") ? "" : "inactive")} 
-                        onClick={() => onRoleChange('C')}>C</span>
-                    <span 
-                        className={"role-icon role-A " + (roles.some(r => r == "A") ? "" : "inactive")} 
-                        onClick={() => onRoleChange('A')}>A</span>
+                <div className={"results " + (focus ? "" : "hidden")}>
+                    <PlayerList 
+                        players={suggested}
+                        selectedPlayers={props.selectedPlayers}
+                        onClick={(pl) => onSelect(pl)} 
+                        onRemove={props.onRemove}
+                    />
                 </div>
+                
             </div>
-
-            <div className="results">
-                <PlayerList 
-                    players={suggested}
-                    selectedPlayers={props.selectedPlayers}
-                    onClick={(pl) => onSelect(pl)} />
-            </div>
-            
         </div>
-         
     </>
 }

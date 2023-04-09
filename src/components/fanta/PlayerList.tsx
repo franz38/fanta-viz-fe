@@ -7,6 +7,7 @@ interface PlayerListProps {
     players: Player[];
     selectedPlayers: Player4List[];
     onClick: (pl: Player) => void;
+    onRemove: (player: Player) => void;
 }
 
 export const PlayerList = (props: PlayerListProps) => {
@@ -16,7 +17,8 @@ export const PlayerList = (props: PlayerListProps) => {
     return <div className="players-list">
         {props.players.map((v, id) => 
         <div 
-            className={"result tab " + (isSelected(v) ? "selected" : "")} 
+            className={"result tab " + (isSelected(v) ? "selected" : "")}
+            key={v.name + id.toString()}
         >
                 <div style={{display: "flex"}}>
                     <span className={"role-icon role-" + (v.role ?? "")}>{v.role}</span>
@@ -26,10 +28,11 @@ export const PlayerList = (props: PlayerListProps) => {
                 {isSelected(v) ?
                     <Remove 
                         className={"addIcon"} 
+                        onClick={() => props.onRemove(v)}
                     /> :
                     <AddBox 
                         className={"addIcon"} 
-                        onClick={() => props.onClick(v)} key={v.name + id.toString()}
+                        onClick={() => props.onClick(v)}
                     />
                 }
 
