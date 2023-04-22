@@ -6,12 +6,15 @@ import { Player } from "../../types/Player";
 import { PlayerList } from "./PlayerList";
 import { Player4List } from "./Wrapper";
 
+const ALL_ROLES = ['P', 'D', 'C', 'A'];
+
 interface AddPlayerFormProps {
     players: Player[];
     selectedPlayers: Player4List[];
     onSelect: (playerName: Player) => void;
     onRemove: (player: Player) => void;
 }
+
 export const AddPlayerForm = (props: AddPlayerFormProps) => {
 
     const [suggested, setsuggested] = useState<Player[]>([]);
@@ -27,13 +30,18 @@ export const AddPlayerForm = (props: AddPlayerFormProps) => {
     }
 
     const onRoleChange = (role: string) => {
-        let newRoles = []
-        if (roles.some(r => r == role)){
+        let newRoles: string[] = []
+        
+        if (roles.length == 4)
+            newRoles = [role]
+        else if (roles.some(r => r == role))
             newRoles = roles.filter(r => r != role);
-        }
-        else {
+        else 
             newRoles = [...roles, role];
-        }
+
+        if (newRoles.length == 0)
+            newRoles = ALL_ROLES;
+        
         setRoles(newRoles)
         filterPlayers(undefined, newRoles)
     }
@@ -60,7 +68,7 @@ export const AddPlayerForm = (props: AddPlayerFormProps) => {
     }
 
     useEffect(() => {
-        setRoles(['P', 'D', 'C', 'A'])
+        setRoles(ALL_ROLES)
     }, [])
 
     useEffect(() => {
