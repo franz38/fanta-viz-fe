@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/fanta-viz-fe/static/css/main.665ff477.css",
-    "main.js": "/fanta-viz-fe/static/js/main.92e0b657.js",
+    "main.css": "/fanta-viz-fe/static/css/main.9a645fb5.css",
+    "main.js": "/fanta-viz-fe/static/js/main.3bb6030e.js",
     "static/js/787.ebeeb080.chunk.js": "/fanta-viz-fe/static/js/787.ebeeb080.chunk.js",
     "index.html": "/fanta-viz-fe/index.html",
-    "main.665ff477.css.map": "/fanta-viz-fe/static/css/main.665ff477.css.map",
-    "main.92e0b657.js.map": "/fanta-viz-fe/static/js/main.92e0b657.js.map",
+    "main.9a645fb5.css.map": "/fanta-viz-fe/static/css/main.9a645fb5.css.map",
+    "main.3bb6030e.js.map": "/fanta-viz-fe/static/js/main.3bb6030e.js.map",
     "787.ebeeb080.chunk.js.map": "/fanta-viz-fe/static/js/787.ebeeb080.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.665ff477.css",
-    "static/js/main.92e0b657.js"
+    "static/css/main.9a645fb5.css",
+    "static/js/main.3bb6030e.js"
   ]
 }
