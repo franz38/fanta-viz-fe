@@ -209,9 +209,6 @@ body {
 
     @media (min-width: 900px){
         width: auto;
-        input{
-            font-size: 16px;
-        }
     }
 
 
@@ -236,12 +233,17 @@ body {
             border: 0px;
             outline: 0px;
             padding: 1rem 0px;
-            font-size: 14px;
+            font-size: 16px;
             background-color: transparent;
             width: 100%;
             font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
             'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
             sans-serif;
+
+            @media (min-width: 900px){
+                font-size: 14px;
+            }
+
         }
     }
 
