@@ -10,15 +10,15 @@ $gk-color: #F2CC8F;
 body {
     margin: 0;
     font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #E5D4C3;
     color: #5B5754;
     background-color: #F5F5F5;
     /* background-color: #00aed0;  */
-  }
+}
 
 .mode-selector {
     display: flex;
@@ -31,79 +31,77 @@ body {
     flex-direction: column;
     max-width: 1200px;
     margin: auto;
-    
-    
-    @media (min-width: 900px){
+
+
+    @media (min-width: 900px) {
         padding-top: 2rem;
         padding-bottom: 2rem;
         flex-direction: row;
     }
 
-    .playersList {
+    .playersList {}
 
-    }
-
-    .leftBar{
+    .leftBar {
         width: 100%;
         z-index: 1;
-        
-        @media (min-width: 900px){
+
+        @media (min-width: 900px) {
             margin-right: 2rem;
             width: 14rem;
         }
 
-        .playersList{
+        .playersList {
             position: fixed;
             width: 100%;
             background-color: #fff;
-            
-            &.focused{
+
+            &.focused {
                 height: 100vh;
             }
 
-            @media (min-width: 900px){
+            @media (min-width: 900px) {
                 height: calc(100vh - 4rem);
                 width: 14rem;
                 background-color: transparent;
             }
-        
-            .addPlayerSection{
+
+            .addPlayerSection {
                 display: flex;
                 flex-direction: column;
                 height: 100%;
             }
-        
-            .results{
+
+            .results {
                 overflow: scroll;
-                
-                @media (min-width: 900px){
+
+                @media (min-width: 900px) {
                     width: 14rem;
                 }
 
-                &.hidden{
+                &.hidden {
                     display: none;
-        
-                    @media(min-width: 900px){
+
+                    @media(min-width: 900px) {
                         display: block;
                     }
                 }
             }
-        
+
         }
-        
+
     }
 
     .content {
         flex-grow: 1;
         margin-top: 9rem;
 
-        @media(min-width: 900px){
+        @media(min-width: 900px) {
             margin-top: 0px;
         }
     }
 }
 
-.tab{
+.tab {
     background-color: #fff;
     border-radius: 2px;
 }
@@ -135,16 +133,16 @@ body {
         top: 1rem;
     }
 
-    .player-stats-box{
+    .player-stats-box {
         position: relative;
         max-width: 1000px;
         width: 100%;
 
-        &.hidden{
+        &.hidden {
             opacity: 0;
         }
 
-        
+
 
         g.chart rect {
             cursor: pointer;
@@ -168,7 +166,7 @@ body {
     top: 0px;
     left: 0px;
 
-    
+
     &.visible {
         opacity: .9;
     }
@@ -196,23 +194,23 @@ body {
         /* border-radius: 50%; */
         margin-right: 6px;
     }
-  }
+}
 
 .searchbox {
 
     width: auto;
     display: flex;
-    flex-direction: column  ;
+    flex-direction: column;
     align-items: center;
     background: #fff;
     padding: 1.25rem 0.5rem;
 
-    @media (min-width: 900px){
+    @media (min-width: 900px) {
         width: auto;
     }
 
 
-    .queryBox{   
+    .queryBox {
         display: flex;
         align-items: center;
         border: 1px solid #ccc;
@@ -220,15 +218,14 @@ body {
         background: #cccccc1f;
         width: 100%;
 
-        @media (min-width: 900px){
+        @media (min-width: 900px) {}
 
-        }
         .icon {
             width: 1rem;
             height: 1rem;
             padding: .5rem;
         }
-        
+
         input {
             border: 0px;
             outline: 0px;
@@ -237,46 +234,47 @@ body {
             background-color: transparent;
             width: 100%;
             font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-            'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-            sans-serif;
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
 
-            @media (min-width: 900px){
+            @media (min-width: 900px) {
                 font-size: 14px;
             }
 
         }
     }
 
-    .searchBox-2section{
+    .searchBox-2section {
         display: flex;
         align-content: space-between;
         width: 100%;
 
-        &.hidden{
+        &.hidden {
             display: none;
 
-            @media(min-width: 900px){
+            @media(min-width: 900px) {
                 display: block;
             }
         }
 
-        
+
     }
 
     .rolesBox {
         padding: 1.5rem 0px .5rem 0px;
         width: 100%;
-        .role-icon{
+
+        .role-icon {
             cursor: pointer;
         }
     }
 
-    button{
+    button {
         height: 30px;
         margin: 1.5rem 0px 0.5rem 0px;
         width: 8rem;
 
-        @media (min-width: 900px){
+        @media (min-width: 900px) {
             display: none;
         }
     }
@@ -298,16 +296,18 @@ body {
         margin: 2px 0px;
         border-bottom: 1px solid #eee;
 
-        @media (min-width: 900px){
+        @media (min-width: 900px) {
             border-bottom: none;
-            .addIcon{
+
+            .addIcon {
                 opacity: 0;
             }
         }
 
         &:hover {
             background-color: rgba(gray, .01);
-            .addIcon{
+
+            .addIcon {
                 opacity: 1;
             }
         }
@@ -316,7 +316,7 @@ body {
             background-color: rgba(gray, .1);
         }
 
-        &:last-child{
+        &:last-child {
             margin-bottom: 0px;
         }
 
@@ -328,11 +328,11 @@ body {
         .addIcon {
             padding-right: 1rem;
         }
-        
+
     }
 }
 
-.role-icon{
+.role-icon {
     $icon-size: 20px;
 
     display: inline-block;
@@ -342,29 +342,35 @@ body {
     margin: 0px 5px;
     background-color: gray;
     color: rgba(#fff, 0.8);
+
     &.role-A {
         background-color: $att-color;
     }
+
     &.role-M {
         background-color: $mid-color;
     }
+
     &.role-D {
         background-color: $def-color;
     }
+
     &.role-P {
         background-color: $gk-color;
     }
-    &.inactive{
+
+    &.inactive {
         background-color: transparent;
         color: gray;
     }
-    &.button{
+
+    &.button {
         $mobile-size: $icon-size* 1.5;
         width: $mobile-size;
         height: $mobile-size;
         line-height: $mobile-size;
 
-        @media(min-width: 900px){
+        @media(min-width: 900px) {
             width: $icon-size;
             height: $icon-size;
             line-height: $icon-size;
