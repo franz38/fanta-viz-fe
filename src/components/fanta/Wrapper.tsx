@@ -56,7 +56,7 @@ export const Wrapper = () => {
 
             <div className="content">
                 <div className="playerDataList">
-                    {selectedPlayers.map((pd, id) => <PlayerStats data={pd} mode={visualMode} key={"pd-" + id.toString()} />)}
+                    {selectedPlayers.map((pd, id) => <PlayerStats data={pd} mode={visualMode} key={"pd-" + pd.fantaCode.toString()} />)}
                 </div>
             </div>
 
